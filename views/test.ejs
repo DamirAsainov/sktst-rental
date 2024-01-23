@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Erkeldy App</title>
+  <!--CSS-->
+  <link rel="stylesheet" href="styles/indexCSS.css">
+  <!--Favicon-->
+  <link rel="shortcut icon" href="img/banana.png">
+  <!--Google Fonts-->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=Zen+Dots&display=swap"
+    rel="stylesheet">
+  <!--Jquery-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <!--Boostrap-->
+  <link href="bootstrap-5.3.2-dist/css/bootstrap.css" rel="stylesheet">
+  <!--Fontawesome icons-->
+  <script src="https://kit.fontawesome.com/e4e39c0277.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <%- include('blocks/header') -%>
+
+    <section class="container-fluid container-md">
+        <% categories.forEach(function(category){ %> 
+            <h1 class="text-center m-5"><%= category %></h1>
+        <% }); %>
+    </section>
+</body>

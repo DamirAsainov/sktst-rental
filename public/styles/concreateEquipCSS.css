@@ -1,0 +1,37 @@
+* {
+    font-family: Ubuntu, Arial, Helvetica, sans-serif;
+    margin: 0px;
+}
+html {
+
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    width: 100%;
+    max-width: 100%;    
+    overflow-x: hidden;
+}
+
+.nav-item i {
+    font-size: 2rem;
+    transition: 0.5s ease-in;
+}
+.plus-minus{
+    height: 30px;
+    display: flex;
+    width: 100px;
+    justify-content: space-between;
+    align-items: center;
+}
+.status-div{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+li.nav-item p{
+    position: relative;
+    font-size: 24px;
+}

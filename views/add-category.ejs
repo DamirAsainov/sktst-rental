@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product</title>
+    <!-- Bootstrap CSS link -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+        }
+
+        h1 {
+            color: #007bff;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        button {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Add Category</h1>
+
+    <!-- Product Form -->
+    <form id="productForm">
+        <div class="form-group">
+            <label for="productName">Category Title:</label>
+            <input type="text" class="form-control" id="categoryTitle" name="categoryTitle" onchange="updateAlert(2)" required>
+        </div>
+        <div id="status"></div>
+    </form>
+    <button class="btn btn-primary" onclick="categorySubmit()">Add Category</button>
+</div>
+
+<!-- Bootstrap JS and Popper.js scripts -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    function handleFormSubmission(url, formData, callback) {
+        let status = 0;
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams(formData),
+        })
+            .catch(error => { 
+                status = 1;
+                console.error('ErrorTest:', error)
+            });
+        updateAlert(status);
+        }
+    function categorySubmit(){
+        const formData = new FormData(document.getElementById('productForm'));
+        handleFormSubmission('/add-category-db', formData, updateAlert);
+    }
+    function updateAlert(status){
+        const alert = document.getElementById('status');
+        if (status == 0){
+            alert.classList = 'alert alert-success'
+            alert.innerHTML = "Added Succesfully"
+        } else if (status == 1){
+            alert.classList = 'alert alert-warning'
+            alert.innerHTML = "Error"
+        }
+        else{
+            alert.classList = "";
+            alert.innerHTML = "";
+        }
+       
+        
+    }
+</script>
+</body>
+</html>
