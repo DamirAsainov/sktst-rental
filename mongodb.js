@@ -13,6 +13,7 @@ const getAllcategories = async () => {
     const documents = await collection.find({}).toArray();
     const titlesArray = documents.map(document => document.title);
     console.log('All Categories', titlesArray);
+
     client.close;
 }
 const uploadImage = async(req) => {
@@ -26,7 +27,6 @@ const uploadImage = async(req) => {
             filename: req.file.filename,
             path: req.file.path
         });
-
         console.log(`File uploaded with ID: ${result.insertedId}`);
         console.log(req.body.productName);
         

@@ -44,8 +44,9 @@
             <input type="text" class="form-control" id="categoryTitle" name="categoryTitle" onchange="updateAlert(2)" required>
         </div>
         <div id="status"></div>
+        <button class="btn btn-primary" onclick="categorySubmit()">Add Category</button>
     </form>
-    <button class="btn btn-primary" onclick="categorySubmit()">Add Category</button>
+
 </div>
 
 <!-- Bootstrap JS and Popper.js scripts -->
@@ -69,7 +70,12 @@
         updateAlert(status);
         }
     function categorySubmit(){
-        const formData = new FormData(document.getElementById('productForm'));
+        const formID = document.getElementById('productForm');
+        console.log(formID)
+        if (formID == ""){
+            return;
+        }
+        const formData = new FormData(formID);
         handleFormSubmission('/add-category-db', formData, updateAlert);
     }
     function updateAlert(status){
