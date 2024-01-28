@@ -39,19 +39,19 @@
     <form id="productForm" action="/upload" method="post" enctype="multipart/form-data">
         <div class="form-group mt-3">
             <label for="productName">Product Name:</label>
-            <input type="text" class="form-control" id="productName" name="productName" required>
+            <input type="text" class="form-control" id="productName" name="productName" onchange="updateAlert(-1)" required>
         </div>
         <div class="form-group mt-3">
             <label for="description">Description:</label>
-            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+            <textarea class="form-control" id="description" name="description" rows="3"  onchange="updateAlert(-1)" required></textarea>
         </div>
         <div class="form-group mt-3">
             <label for="price">Price:</label>
-            <input type="number" class="form-control" id="price" name="price" step="0.01" required>
+            <input type="number" class="form-control" id="price" name="price" step="1000" onchange="updateAlert(-1)" required>
         </div>
         <div class="form-group mt-3">
             <label for="quantity">Quantity:</label>
-            <input type="number" class="form-control" id="quantity" name="quantity" required>
+            <input type="number" class="form-control" id="quantity" name="quantity" onchange="updateAlert(-1)" required>
         </div>
         <div class="form-group mt-3">
             <label for="category">Category:</label>

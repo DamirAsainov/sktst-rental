@@ -41,7 +41,7 @@ body {
 
 .equip-card .card-img {
     width: 100%;
-    height: 200px;
+    height: 230px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -56,11 +56,19 @@ body {
 
 .equip-card .card-info {
     width: 100%;
-    height: 150px;
+    height: 120px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.card-info .card-title{
+    -webkit-line-clamp: 2; /* Число отображаемых строк */
+    display: -webkit-box; /* Включаем флексбоксы */
+    -webkit-box-orient: vertical; /* Вертикальная ориентация */
+    overflow: hidden;
 }
 
 .equip-card:hover {

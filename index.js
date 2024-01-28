@@ -20,8 +20,9 @@ app.use(express.static('public'));
 app.use(express.urlencoded({extended: false}));
 
 
-app.get('/', (req, res) => {
-    res.render('index');
+app.get('/', async (req, res) => {
+    const categories = await crudFunctions.getAllCategoriesWithEquip();
+    res.render('index', {categories: categories});
 })
 app.get('/add-equip', async (req, res) => {
     const titlesArray = await crudFunctions.getAllCategories();

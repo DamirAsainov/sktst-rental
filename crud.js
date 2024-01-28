@@ -1,6 +1,4 @@
 const { MongoClient } = require('mongodb');
-const wasi = require("wasi");
-
 const url = 'mongodb://localhost:27017';
 const client = new MongoClient(url);
 const dbName = 'myProject';
@@ -40,6 +38,23 @@ const getAllCategoriesWithImg = async () => {
         await client.close;
     }
 }
+const getAllCategoriesWithEquip = async () =>{
+    try{
+        await client.connect();
+        const db = client.db(dbName);
+        let collection = db.collection('categories');
+        const documents = await collection.find({}).toArray();
+        collection = db.collection('equipments');
+        for(const doc of documents){
+            doc.equip = await collection.find({category: doc.title}).toArray();
+        }
+        return documents;
+    } catch (error){
+        console.error("Get all categories with equipments error", error);
+    } finally {
+        await client.close();
+    }
+}
 async function addEquip(req, res){
     try{
         await client.connect();
@@ -62,7 +77,8 @@ async function addEquip(req, res){
             price: req.body.price,
             quantity: req.body.quantity,
             category: req.body.category,
-            imageID: result.insertedId
+            imageID: result.insertedId,
+            imagePath: req.file.path
         })
         res.send('File uploaded successfully!');
     } catch (error){
@@ -103,5 +119,6 @@ async function addCategory(req,res){
 module.exports.addEquip = addEquip;
 module.exports.getAllCategories = getAllCategories;
 module.exports.getAllCategoriesWithImg = getAllCategoriesWithImg;
+module.exports.getAllCategoriesWithEquip = getAllCategoriesWithEquip;
 module.exports.addCategory = addCategory;
 module.exports.addEquip = addEquip;

@@ -28,115 +28,23 @@
   <%- include('blocks/header') -%>
 
   <section class="container-fluid container-md">
-    <h1 class="text-center m-5">Camera</h1>
-    <div class="cards">
-      <a href="concreteEquip.html">
+    <% categories.forEach(function(category){ %>
+      <h1 class="text-center m-5"><%= category.title %></h1>
+      <div class="cards">
+      <% category.equip.forEach(function(eq){ %>
         <div class="equip-card m-5">
           <div class="card-img">
-            <img src="/img/ILCE7M2B 1.png">
+            <img src="../<%= eq.imagePath %>">
           </div>
           <div class="card-info">
-            <h3 class="card-title text-center">Sony a7 Pro Full Frame</h3>
-            <p class="price text-info">49 990</p>
+            <h3 class="card-title text-center"><%= eq.productName%></h3>
+            <p class="price text-info"><%=  eq.price%></p>
           </div>
         </div>
-      </a>
-
-      <div class="equip-card m-5">
-        <div class="card-img">
-          <img src="/img/ILCE7M2B 1.png">
-        </div>
-        <div class="card-info">
-          <h3 class="card-title text-center">Sony a7 Pro Full Frame</h3>
-          <p class="price text-info">49 990</p>
-        </div>
+      <% }); %>
       </div>
-
-      <div class="equip-card m-5">
-        <div class="card-img">
-          <img src="/img/ILCE7M2B 1.png">
-        </div>
-        <div class="card-info">
-          <h3 class="card-title text-center">Sony a7 Pro Full Frame</h3>
-          <p class="price text-info">49 990</p>
-        </div>
-      </div>
-
-      <div class="equip-card m-5">
-        <div class="card-img">
-          <img src="/img/ILCE7M2B 1.png">
-        </div>
-        <div class="card-info">
-          <h3 class="card-title text-center">Sony a7 Pro Full Frame</h3>
-          <p class="price text-info">49 990</p>
-        </div>
-      </div>
-
-      <div class="equip-card m-5">
-        <div class="card-img">
-          <img src="/img/ILCE7M2B 1.png">
-        </div>
-        <div class="card-info">
-          <h3 class="card-title text-center">Sony a7 Pro Full Frame</h3>
-          <p class="price text-info">49 990</p>
-        </div>
-      </div>
-    </div>
-
-    <!--Lens!!!-->
-    <h1 class="text-center m-5">Lens</h1>
-    <div class="cards">
-      <div class="equip-card m-5">
-        <div class="card-img">
-          <img src="/img/1701421 copy.png">
-        </div>
-        <div class="card-info">
-          <h3 class="card-title text-center">Sony FE 24mm f/1.4 GM Review</h3>
-          <p class="price text-info">15 990</p>
-        </div>
-      </div>
-      <div class="equip-card m-5">
-        <div class="card-img">
-          <img src="/img/1701421 copy.png">
-        </div>
-        <div class="card-info">
-          <h3 class="card-title text-center">Sony FE 24mm f/1.4 GM Review</h3>
-          <p class="price text-info">49 990</p>
-        </div>
-      </div>
-      <div class="equip-card m-5">
-        <div class="card-img">
-          <img src="/img/1701421 copy.png">
-        </div>
-        <div class="card-info">
-          <h3 class="card-title text-center">Sony FE 24mm f/1.4 GM Review</h3>
-          <p class="price text-info">49 990</p>
-        </div>
-      </div>
-
-    </div>
-
-    <h1 class="text-center m-5">Light</h1>
-    <div class="cards">
-      <div class="equip-card m-5">
-        <div class="card-img">
-          <img src="/img/p600c.png">
-        </div>
-        <div class="card-info">
-          <h3 class="card-title text-center">Nova P600c</h3>
-          <p class="price text-info">10 990</p>
-        </div>
-      </div>
-      <div class="equip-card m-5">
-        <div class="card-img">
-          <img src="/img/amaran300cblack_8.png">
-        </div>
-        <div class="card-info">
-          <h3 class="card-title text-center">Amaran 300c</h3>
-          <p class="price text-info">10 990</p>
-        </div>
-      </div>
-    </div>
+    <% }); %>
+    
   </section>
 
   <%- include('blocks/footer') -%>
