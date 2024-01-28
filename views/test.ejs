@@ -26,8 +26,10 @@
     <%- include('blocks/header') -%>
 
     <section class="container-fluid container-md">
-        <% categories.forEach(function(category){ %> 
-            <h1 class="text-center m-5"><%= category %></h1>
+        <% categories.forEach(function(category){ %>
+            <h1 class="text-center m-5"><%= category.title %></h1>
+            <p><%= category.imageID%></p>
+            <img src="../<%= category.image.path%>" width="100px">
         <% }); %>
     </section>
 </body>
