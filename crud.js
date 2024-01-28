@@ -1,4 +1,4 @@
-const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectId} = require('mongodb');
 const url = 'mongodb://localhost:27017';
 const client = new MongoClient(url);
 const dbName = 'myProject';
@@ -112,7 +112,20 @@ async function addCategory(req,res){
         await client.close();
     }
 }
-
+async function getEquip(id){
+    try{
+        await client.connect();
+        const db = client.db(dbName);
+        let collection = db.collection('equipments');
+        const document = await collection.findOne({_id: new ObjectId(id)});
+        return document;
+    }catch (error){
+        console.error(error);
+        return null;
+    }finally {
+        await client.close();
+    }
+}
 
 
 
@@ -120,5 +133,6 @@ module.exports.addEquip = addEquip;
 module.exports.getAllCategories = getAllCategories;
 module.exports.getAllCategoriesWithImg = getAllCategoriesWithImg;
 module.exports.getAllCategoriesWithEquip = getAllCategoriesWithEquip;
+module.exports.getEquip = getEquip;
 module.exports.addCategory = addCategory;
 module.exports.addEquip = addEquip;

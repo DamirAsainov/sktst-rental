@@ -28,6 +28,15 @@ app.get('/add-equip', async (req, res) => {
     const titlesArray = await crudFunctions.getAllCategories();
     res.render('add-equip', {categories: titlesArray.map(document => document.title)})
 })
+app.get('/equip/:id', async (req, res) => {
+    const equip = await crudFunctions.getEquip(req.params.id); // change
+    if(equip == null){
+        res.send('what???', 404);
+    }else {
+        res.render('concrete-equip', {eq: equip});
+    }
+
+})
 app.get('/add-category', (req, res) => {
     res.render('add-category');
 })

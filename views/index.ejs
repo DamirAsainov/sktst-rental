@@ -32,19 +32,19 @@
       <h1 class="text-center m-5"><%= category.title %></h1>
       <div class="cards">
       <% category.equip.forEach(function(eq){ %>
-        <div class="equip-card m-5">
+        <div class="equip-card m-5" onclick="openConcreteEquip('<%= eq._id%>')">
           <div class="card-img">
             <img src="../<%= eq.imagePath %>">
           </div>
           <div class="card-info">
             <h3 class="card-title text-center"><%= eq.productName%></h3>
-            <p class="price text-info"><%=  eq.price%></p>
+            <p class="price text-info"><%= eq.price%></p>
           </div>
         </div>
       <% }); %>
       </div>
     <% }); %>
-    
+
   </section>
 
   <%- include('blocks/footer') -%>
@@ -53,6 +53,11 @@
   <!-- End of .container -->
   <script src="bootstrap-5.3.2-dist/js/bootstrap.js"></script>
   <script src="js/indexScript.js"></script>
+  <script>
+    function openConcreteEquip(id){
+      window.location.href = "/equip/" + id;
+    }
+  </script>
 </body>
 
 </html>
