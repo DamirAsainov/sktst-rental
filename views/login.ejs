@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <!-- Bootstrap CSS link -->
+    <link href="bootstrap-5.3.2-dist/css/bootstrap.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="styles/indexCSS.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=Zen+Dots&display=swap"
+            rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 40px rgba(255, 255, 255, 0.4);
+            background-color: #1a1d20;
+        }
+
+        button {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body class="bg-secondary">
+<%- include('blocks/header') -%>
+<div class="container pb-5">
+
+    <h1 class="mb-5">Login</h1>
+
+    <!-- Product Form -->
+    <form id="loginForm" action="/login" method="post">
+        <div class="form-group mt-3">
+            <label for="username">Username</label>
+            <input type="text" class="form-control mt-2" id="username" name="username" required>
+        </div>
+        <div class="form-group mt-3">
+            <label for="password">Password</label>
+            <input type="password" class="form-control mt-2" id="password" name="password" required>
+        </div>
+        <button type="button" class="btn btn-outline-warning mt-3" onclick="categorySubmit()" id="add-prod-btn">Login</button>
+        <div id="status"></div>
+    </form>
+</div>
+
+<!-- Bootstrap JS and Popper.js scripts -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+<script>
+    async function handleFormSubmission(url, formData) {
+        try {
+            const response = await fetch(url, {
+                method: "POST",
+                mode: "cors",
+                cache: "no-cache",
+                credentials: "same-origin",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                redirect: "follow",
+                referrerPolicy: "no-referrer",
+                body: JSON.stringify(formData),
+            });
+
+            // Await the response.json() to get the actual result
+            return await response.json();
+        } catch (error) {
+            console.error('Error during form submission:', error);
+            throw error; // rethrow the error to handle it elsewhere if needed
+        }
+    }
+
+    async function categorySubmit() {
+        const formID = document.getElementById('loginForm');
+        if (formID.innerHTML === "") {
+            return;
+        }
+
+        const formData = {
+            username: document.getElementById('username').value,
+            password: document.getElementById('password').value
+        };
+
+        try {
+            const result = await handleFormSubmission('/login', formData);
+            console.log(result.token); // Assuming the token is a property of the result object
+        } catch (error) {
+            console.error('Error during category submission:', error);
+        }
+    }
+
+</script>
+<script src="bootstrap-5.3.2-dist/js/bootstrap.js"></script>
+<script src="js/indexScript.js"></script>
+</body>
+</html>

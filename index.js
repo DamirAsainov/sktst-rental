@@ -2,6 +2,12 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const crudFunctions = require('./crud')
+const mongoose = require('mongoose');
+const authCont = require('./authController');
+const {check} = require('express-validator');
+const authMiddleware = require('./midldleware/authMiddleware')
+const roleMiddleware = require('./midldleware/roleMiddleware')
+const {login} = require("./authController");
 
 const app =  express();
 const storage = multer.diskStorage({
@@ -18,6 +24,7 @@ const upload = multer({ storage: storage });
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(express.urlencoded({extended: false}));
+app.use(express.json())
 
 
 app.get('/', async (req, res) => {
@@ -40,7 +47,7 @@ app.get('/equip/:id', async (req, res) => {
 app.get('/add-category', (req, res) => {
     res.render('add-category');
 })
-app.get('/test', async (req, res) => {
+app.get('/test', roleMiddleware(["ADMIN"]), async (req, res) => {
     const categories = await crudFunctions.getAllCategoriesWithImg();
     res.render('test', {categories: categories })
 })
@@ -57,11 +64,27 @@ app.get('/categories', async (req, res) => {
     const categories = await crudFunctions.getAllCategoriesWithImg();
     res.render('categories', {categories: categories });
 });
+app.post('/registration', [check('username', 'Username can not be empty').notEmpty(),
+        check('password', 'Password must be > 4 symbols < 20').isLength({min: 4, max: 20})],
+        async (req, res)=>{
+    await authCont.registration(req, res);
+})
+app.post('/login',async (req, res) =>{
+    await authCont.login(req, res);
+})
+app.get('/log', (req, res) =>{
+    res.render('login')
+})
 
 
 
 
 const PORT = 3000;
-app.listen(PORT, () => {
-    console.log(`Server started: http://localhost:${PORT}`)
-});
+async function start(){
+    await mongoose.connect("mongodb://localhost:27017/myProject")
+    app.listen(PORT, () => {
+        console.log(`Server started: http://localhost:${PORT}`)
+    });
+}
+start();
+
