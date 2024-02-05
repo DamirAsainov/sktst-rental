@@ -12,9 +12,6 @@ const generateAccessToken = (id, roles) => {
     }
     return jwt.sign(payload, secret, {expiresIn: "24h"})
 }
-async function getUsers() {
-
-}
 async function registration(req,res) {
     try{
         const errors = validationResult(req);
@@ -53,16 +50,53 @@ async function login (req, res) {
         const validPassword = bcrypt.compareSync(password, user.password)
         if(!validPassword){
             res.status(400).json({message: 'Password is not correct'})
+            return;
         }
         const token = generateAccessToken(user._id, user.roles)
         console.log(token)
+        res.cookie('JWToken', token, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true});
         res.json({token})
     } catch (e){
         console.error(e);
         res.status(400).json({message: e})
     }
 }
+function logout(req, res){
+    try{
+        res.clearCookie('JWToken');
+        res.json({message: "Suggest logout"})
+    } catch (e){
+        console.error(e);
+        res.status(400).json({message: "Error with logout"})
+    }
 
-module.exports.getUsers = getUsers;
+}
+function verifyUser(req){
+    try{
+        const token = req.headers.authorization.split(' ')[1];
+        if(!token){
+            return false;
+        }
+        jwt.verify(token, secret)
+        return true;
+    } catch (e){
+        return false;
+    }
+}
+function getUserID(req){
+    try{
+        const token = req.headers.authorization.split(' ')[1];
+        if(!token){
+            return null;
+        }
+        const result = jwt.decode(token);
+        return result;
+    } catch (e){
+        return null;
+    }
+}
 module.exports.registration = registration;
 module.exports.login = login;
+module.exports.loguot = logout;
+module.exports.verifyUser = verifyUser;
+module.exports.getUserID = getUserID;

@@ -20,8 +20,13 @@
             <a class="nav-link active fw-bold" aria-current="page" href="game.html">Basket</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active fw-bold" aria-current="page" href="/log">Account
+            <% if (login){%>
+            <a class="nav-link active fw-bold" aria-current="page" href="/account">Account
             </a>
+            <%}else{%>
+              <a class="nav-link active fw-bold text-bg-primary" aria-current="page" href="/log">Login
+              </a>
+            <%}%>
           </li>
         </ul>
       </div>

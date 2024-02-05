@@ -127,6 +127,20 @@ async function getEquip(id){
     }
 }
 
+async function getUser(id){
+    try{
+        await client.connect();
+        const db = client.db(dbName);
+        let collection = db.collection('users');
+        return await collection.findOne({_id: new ObjectId(id)});
+    }catch (error){
+        console.error(error);
+        return null;
+    }finally {
+        await client.close();
+    }
+}
+
 
 
 module.exports.addEquip = addEquip;
@@ -136,3 +150,4 @@ module.exports.getAllCategoriesWithEquip = getAllCategoriesWithEquip;
 module.exports.getEquip = getEquip;
 module.exports.addCategory = addCategory;
 module.exports.addEquip = addEquip;
+module.exports.getUser = getUser;
