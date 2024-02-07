@@ -93,8 +93,8 @@ app.get('/search',addTokenMiddleware, async (req, res) => {
     const equips = await crudFunctions.searchEquip(query, page)
     res.render('search', { eqs: equips, login: authCont.verifyUser(req), result: await crudFunctions.queryLen(query)})
 })
-app.get('/basket', async (req, res) =>{
-    res.render('basket')
+app.get('/basket',addTokenMiddleware, async (req, res) =>{
+    res.render('basket', {login: authCont.verifyUser(req)})
 })
 
 

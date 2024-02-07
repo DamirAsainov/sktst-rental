@@ -1,76 +1,271 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shopping Basket</title>
-    <!-- Include Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!-- Your Custom CSS -->
+    <link rel="stylesheet" href="styles/indexCSS.css">
+    <!--Favicon-->
+    <link rel="shortcut icon" href="img/banana.png">
+    <!--Google Fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=Zen+Dots&display=swap"
+            rel="stylesheet">
+    <!--Boostrap-->
+    <link href="bootstrap-5.3.2-dist/css/bootstrap.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/e4e39c0277.js" crossorigin="anonymous"></script>
     <style>
-        /* Add your custom CSS styles here */
-        body {
-            font-family: Arial, sans-serif;
+        body{
+            background-color: #0F0F0F;
+            min-height: 100vh;
+            font-family: 'Open Sans', sans-serif;
         }
-        .container {
-            margin-top: 50px;
+        .main{
+            vertical-align: middle;
+            display: flex;
+
+            font-size: 0.8rem;
+            font-weight: bold;
         }
-        /* Adjust styles as needed */
+        .title{
+            margin-bottom: 5vh;
+        }
+        .card{
+            margin: auto;
+            max-width: 950px;
+            width: 90%;
+            box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            border-radius: 1rem;
+            border: transparent;
+        }
+        @media(max-width:767px){
+            .card{
+                margin: 3vh auto;
+            }
+        }
+        #cart{
+            padding: 4vh 5vh;
+            border-bottom-left-radius: 1rem;
+            border-top-left-radius: 1rem;
+            box-shadow: 0 0 60px rgba(255, 255, 255, 0.4);
+        }
+        @media(max-width:767px){
+            #cart{
+                padding: 4vh;
+                border-bottom-left-radius: unset;
+                border-top-right-radius: 1rem;
+            }
+        }
+        #summary{
+            background-color: #0F0F0F;
+            border-top-right-radius: 1rem;
+            border-bottom-right-radius: 1rem;
+            padding: 4vh;
+            box-shadow: 10px 0 50px rgba(255, 255, 255, 0.4);
+        }
+        @media(max-width:767px){
+            #summary{
+                border-top-right-radius: unset;
+                border-bottom-left-radius: 1rem;
+            }
+        }
+        #summary .col-2{
+            padding: 0;
+        }
+        #summary .col-10
+        {
+            padding: 0;
+        }
+        .row{
+            margin: 0;
+        }
+        .title b{
+            font-size: 1.5rem;
+        }
+        .main{
+            margin: 0;
+            padding: 2vh 0;
+            width: 100%;
+        }
+        .col-2, .col{
+            padding: 0 1vh;
+        }
+        a{
+            padding: 0 1vh;
+        }
+        .close{
+            margin-left: auto;
+            font-size: 0.7rem;
+        }
+        img{
+            width: 3.5rem;
+        }
+        .back-to-shop{
+            margin-top: 4.5rem;
+        }
+        h5{
+            margin-top: 4vh;
+        }
+        hr{
+            margin-top: 1.25rem;
+        }
+        form{
+            padding: 2vh 0;
+        }
+        input{
+            border: 1px solid rgba(0, 0, 0, 0.137);
+            padding: 1vh;
+            margin-bottom: 4vh;
+            outline: none;
+            width: 100%;
+            background-color: rgb(247, 247, 247);
+            color: #0b0b0b;
+        }
+        input:focus::-webkit-input-placeholder
+        {
+            color:transparent;
+        }
+        .order.btn{
+            background-color: #000;
+            font-weight: bold;
+            border-color: #000;
+            width: 100%;
+            font-size: 0.7rem;
+            margin-top: 4vh;
+            padding: 1vh;
+            border-radius: 0;
+        }
+        .order.btn:hover{
+            background-color: #E14D2A;;
+            border-color: #E14D2A;;
+        }
+        a{
+            color: white;
+        }
+        a:hover{
+            color: white;
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
+<%- include('blocks/header') -%>
+<div class="container-fluid main mt-5 mb-5">
+<div class="card">
+    <div class="row">
+        <div class="col-md-8 cart" id="cart">
+            <div class="title">
+                <div class="row">
+                    <div class="col"><h4><b>Shopping Cart</b></h4></div>
+                    <div class="col align-self-center text-right text-muted">3 items</div>
+                </div>
+            </div>
+            <div class="row border-top border-bottom">
+                <div class="row main align-items-center">
+                    <div class="col-2"><img class="img-fluid" src="https://i.imgur.com/1GrakTl.jpg"></div>
+                    <div class="col">
+                        <div class="row text-muted">Shirt</div>
+                        <div class="row">Cotton T-shirt</div>
+                    </div>
+                    <div class="col">
+                        <a href="#">-</a><a href="#" class="border">1</a><a href="#">+</a>
+                    </div>
+                    <div class="col">&euro; 44.00 <span class="close">&#10005;</span></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="row main align-items-center">
+                    <div class="col-2"><img class="img-fluid" src="https://i.imgur.com/ba3tvGm.jpg"></div>
+                    <div class="col">
+                        <div class="row text-muted">Shirt</div>
+                        <div class="row">Cotton T-shirt</div>
+                    </div>
+                    <div class="col">
+                        <a href="#">-</a><a href="#" class="border">1</a><a href="#">+</a>
+                    </div>
+                    <div class="col">₸ 44.00 <span class="close">&#10005;</span></div>
+                </div>
+            </div>
+            <div class="row border-top border-bottom">
+                <div class="row main align-items-center">
+                    <div class="col-2"><img class="img-fluid" src="https://i.imgur.com/pHQ3xT3.jpg"></div>
+                    <div class="col">
+                        <div class="row text-muted">Shirt</div>
+                        <div class="row">Cotton T-shirt</div>
+                    </div>
+                    <div class="col">
+                        <a href="#">-</a><a href="#" class="border">1</a><a href="#">+</a>
+                    </div>
+                    <div class="col">&euro; 44.00 <span class="close">&#10005;</span></div>
+                </div>
+            </div>
+            <div class="back-to-shop"><a href="#">&leftarrow;</a><span class="text-muted">Back to shop</span></div>
+        </div>
+        <div class="col-md-4 summary" id="summary">
+            <div><h5><b>Summary</b></h5></div>
+            <hr>
+            <form>
+                <p>NAME</p>
+                <input name="name" id="name" type="text" placeholder="Erkeldy" required>
+                <p>PHONE NUMBER</p>
+                <input id="phoneNumber" name="phoneNumber" placeholder="Enter your phone number" type="tel" required>
+                <div class="row">
+                    <p class="col-5">START</p>
+                    <p class="offset-2 col-5">END</p>
+                    <input class="col-5" type="date" id="start" name="start" required>
+                    <input class="offset-2 col-5" type="date" id="end" name="end" required>
+                </div>
 
-<div class="container">
-    <h1 class="text-center">Shopping Basket</h1>
-    <div id="basketItems">
-        <!-- Basket items will be dynamically added here -->
+            </form>
+            <div class="row" style="border-top: 1px solid rgba(255,255,255,.7); padding: 2vh 0;">
+                <div class="col">TOTAL PRICE</div>
+                <div class="col text-right">₸ 137.00</div>
+            </div>
+            <button class="btn order">ORDER</button>
+        </div>
     </div>
-    <div class="text-center mt-3">
-        <button class="btn btn-primary" onclick="checkout()">Checkout</button>
     </div>
 </div>
+<%- include('blocks/footer') -%>
 
-<!-- Include Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-<!-- Your Custom JavaScript -->
+<script src="bootstrap-5.3.2-dist/js/bootstrap.js"></script>
+<script src="js/indexScript.js"></script>
 <script>
-    // Define a function to handle checkout action
-    function checkout() {
-        // Add your logic for checkout here
-        // For example, redirect to a checkout page or display a confirmation message
-        alert("Checkout clicked! Add your checkout logic here.");
+    async function createEquips(){
+        const equipsIDs = localStorage.getItem('basketEquipsIDs');
+        let equips;
+        await equipsIDs.forEach(id => {
+            equips.push()
+        })
     }
-
-    // Example of dynamically adding basket items (you can replace this with your actual data)
-    const basketItems = [
-        { id: 1, name: "Product 1", price: 10.99 },
-        { id: 2, name: "Product 2", price: 19.99 },
-        { id: 3, name: "Product 3", price: 7.50 }
-    ];
-
-    // Function to render basket items
-    function renderBasketItems() {
-        const basketItemsContainer = document.getElementById("basketItems");
-        basketItemsContainer.innerHTML = ""; // Clear previous content
-        basketItems.forEach(item => {
-            const itemElement = document.createElement("div");
-            itemElement.innerHTML = `
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">${item.name}</h5>
-                        <p class="card-text">Price: $${item.price.toFixed(2)}</p>
-                    </div>
-                </div>`;
-            basketItemsContainer.appendChild(itemElement);
-        });
+    async function getEquip(id){
+        const url = "/"
+        try {
+            await fetch(url, {
+                method: "POST",
+                mode: "cors",
+                cache: "no-cache",
+                credentials: "same-origin",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                redirect: "follow",
+                referrerPolicy: "no-referrer",
+                body: JSON.stringify(formData),
+            }).then(response => response.json())
+                .then(data => {
+                    // Call the provided callback function with the response data
+                    callback(data);
+                })
+                .catch(error => console.error('ErrorTest:', error));
+            // Await the response.json() to get the actual result
+        } catch (error) {
+            console.error('Error during form submission:', error);
+            throw error; // rethrow the error to handle it elsewhere if needed
+        }
     }
-
-    // Call renderBasketItems function to initially render basket items
-    renderBasketItems();
 </script>
-
 </body>
 </html>
