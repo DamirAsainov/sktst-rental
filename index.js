@@ -31,10 +31,11 @@ app.use(cookieParser())
 
 
 app.get('/', addTokenMiddleware,async (req, res) => {
+
     const categories = await crudFunctions.getAllCategoriesWithEquip();
     res.render('index', {categories: categories, login: authCont.verifyUser(req)});
 })
-app.get('/add-equip', async (req, res) => {
+app.get('/add-equip',addTokenMiddleware, roleMiddleware("ADMIN"), async (req, res) => {
     const titlesArray = await crudFunctions.getAllCategories();
     res.render('add-equip', {categories: titlesArray.map(document => document.title)})
 })
@@ -46,12 +47,12 @@ app.get('/equip/:id', addTokenMiddleware,async (req, res) => {
         res.render('concrete-equip', {eq: equip, login: authCont.verifyUser(req)});
     }
 })
-app.get('/add-category', (req, res) => {
+app.get('/add-category',addTokenMiddleware, roleMiddleware("ADMIN"), (req, res) => {
     res.render('add-category');
 })
 app.get('/test', addTokenMiddleware, roleMiddleware(["USER"]), async (req, res) => {
     const categories = await crudFunctions.getAllCategoriesWithImg();
-    res.render('test', {categories: categories })
+    res.render('test', {categories: categories , login:true})
 })
 app.post('/add-category-db',upload.single('image'), async (req, res) =>{
     await crudFunctions.addCategory(req, res);
@@ -86,6 +87,15 @@ app.get('/reg' ,(req, res) => {
 app.get('/account', addTokenMiddleware, roleMiddleware("USER"), async (req, res) => {
     res.render('account', {login: true, user: await crudFunctions.getUser(authCont.getUserID(req))})
 });
+app.get('/search',addTokenMiddleware, async (req, res) => {
+    const query = req.query.q || "";
+    const page = req.query.page || 1;
+    const equips = await crudFunctions.searchEquip(query, page)
+    res.render('search', { eqs: equips, login: authCont.verifyUser(req), result: await crudFunctions.queryLen(query)})
+})
+app.get('/basket', async (req, res) =>{
+    res.render('basket')
+})
 
 
 

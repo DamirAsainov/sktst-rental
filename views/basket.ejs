@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Basket</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Your Custom CSS -->
+    <style>
+        /* Add your custom CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        /* Adjust styles as needed */
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 class="text-center">Shopping Basket</h1>
+    <div id="basketItems">
+        <!-- Basket items will be dynamically added here -->
+    </div>
+    <div class="text-center mt-3">
+        <button class="btn btn-primary" onclick="checkout()">Checkout</button>
+    </div>
+</div>
+
+<!-- Include Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- Your Custom JavaScript -->
+<script>
+    // Define a function to handle checkout action
+    function checkout() {
+        // Add your logic for checkout here
+        // For example, redirect to a checkout page or display a confirmation message
+        alert("Checkout clicked! Add your checkout logic here.");
+    }
+
+    // Example of dynamically adding basket items (you can replace this with your actual data)
+    const basketItems = [
+        { id: 1, name: "Product 1", price: 10.99 },
+        { id: 2, name: "Product 2", price: 19.99 },
+        { id: 3, name: "Product 3", price: 7.50 }
+    ];
+
+    // Function to render basket items
+    function renderBasketItems() {
+        const basketItemsContainer = document.getElementById("basketItems");
+        basketItemsContainer.innerHTML = ""; // Clear previous content
+        basketItems.forEach(item => {
+            const itemElement = document.createElement("div");
+            itemElement.innerHTML = `
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">${item.name}</h5>
+                        <p class="card-text">Price: $${item.price.toFixed(2)}</p>
+                    </div>
+                </div>`;
+            basketItemsContainer.appendChild(itemElement);
+        });
+    }
+
+    // Call renderBasketItems function to initially render basket items
+    renderBasketItems();
+</script>
+
+</body>
+</html>

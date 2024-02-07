@@ -46,7 +46,7 @@
             <label for="image">Photo</label>
             <input type="file" id="image" name="image" accept="image/*" required>
         </div>
-        <div id="status"></div>
+        <div id="status" class="mt-3"></div>
         <button type="button" class="btn btn-outline-primary mt-3" onclick="categorySubmit()" id="add-category-btn">Add Category</button>
     </form>
 
@@ -59,17 +59,15 @@
 
 <script>
     function handleFormSubmission(url, formData, callback) {
-        let status = 0;
         fetch(url, {
             method: 'POST',
             body: formData
-        })
-            .catch(error => {
-                status = 1;
-                console.error('ErrorTest:', error)
-            });
-        callback(status);
-        }
+        }).then(response => response.json())
+            .then(data => {
+                // Call the provided callback function with the response data
+                callback(data);
+            }).catch(error => console.error('ErrorTest:', error));
+    }
     function categorySubmit(){
         const formID = document.getElementById('productForm');
         if (formID.innerHTML === ""){
@@ -81,9 +79,9 @@
     function updateAlert(status){
         const alert = document.getElementById('status');
         const button = document.getElementById('add-category-btn')
-        if (status == 0){
+        if (status == "Category successfully added"){
             alert.classList = 'alert alert-success'
-            alert.innerHTML = "Added Succesfully"
+            alert.innerHTML = "Category successfully added"
             button.disabled = true;
         } else if (status == 1){
             alert.classList = 'alert alert-warning'

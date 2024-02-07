@@ -103,8 +103,8 @@ async function addCategory(req,res){
             title: req.body.categoryTitle,
             imageID: result.insertedId
         });
-
         console.log(`Category add with ID: ${result.insertedId}`);
+        res.json({message: "Category successfully added"});
     } catch (error) {
         console.error('Error adding category:', error);
         res.status(500).send('Error adding category.');
@@ -140,7 +140,42 @@ async function getUser(id){
         await client.close();
     }
 }
+async function searchEquip(query, page){
+    try{
+        let limit = 6;
+        let skip = (page - 1) * limit
+        await client.connect();
+        const db = client.db(dbName);
+        const collection = db.collection('equipments');
 
+        return await collection.find({
+            $or: [
+                { productName: { $regex: query, $options: 'i' } }, // Case-insensitive search for equipment name
+                { description: { $regex: query, $options: 'i' } } // Case-insensitive search for equipment description
+            ]
+        }).skip(skip).limit(limit).toArray();
+    } catch (e){
+        console.error(e);
+        return null;
+    }
+}
+async function queryLen(query){
+    try{
+        await client.connect();
+        const db = client.db(dbName);
+        const collection = db.collection('equipments');
+        const equips =  await collection.find({
+            $or: [
+                { productName: { $regex: query, $options: 'i' } }, // Case-insensitive search for equipment name
+                { description: { $regex: query, $options: 'i' } } // Case-insensitive search for equipment description
+            ]
+        }).toArray();
+        return equips.length;
+    } catch (e){
+        console.error(e);
+        return 0;
+    }
+}
 
 
 module.exports.addEquip = addEquip;
@@ -151,3 +186,5 @@ module.exports.getEquip = getEquip;
 module.exports.addCategory = addCategory;
 module.exports.addEquip = addEquip;
 module.exports.getUser = getUser;
+module.exports.searchEquip = searchEquip;
+module.exports.queryLen = queryLen;
