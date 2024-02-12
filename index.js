@@ -6,10 +6,13 @@ const mongoose = require('mongoose');
 const authCont = require('./authController');
 const {check, cookie} = require('express-validator');
 const cookieParser = require('cookie-parser')
+const { scv } = require("cookie-json-converter");
 const authMiddleware = require('./midldleware/authMiddleware')
 const roleMiddleware = require('./midldleware/roleMiddleware')
 const {login} = require("./authController");
 const addTokenMiddleware = require('./midldleware/addTokenMiddleware')
+
+
 
 const app =  express();
 const storage = multer.diskStorage({
@@ -94,7 +97,13 @@ app.get('/search',addTokenMiddleware, async (req, res) => {
     res.render('search', { eqs: equips, login: authCont.verifyUser(req), result: await crudFunctions.queryLen(query)})
 })
 app.get('/basket',addTokenMiddleware, async (req, res) =>{
-    res.render('basket', {login: authCont.verifyUser(req)})
+    const equipsIDs = JSON.parse(scv(req)['cartItems']);
+    let equips = [];
+    for(let i = 0; i < equipsIDs.length; i++){
+        const equip = await crudFunctions.getEquip(equipsIDs[i]);
+        equips.push(equip);
+    }
+    res.render('basket', {login: authCont.verifyUser(req), equips});
 })
 
 

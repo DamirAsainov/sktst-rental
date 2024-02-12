@@ -58,10 +58,8 @@ const getAllCategoriesWithEquip = async () =>{
 async function addEquip(req, res){
     try{
         await client.connect();
-
         const database = client.db(dbName);
         let collection = database.collection('images');
-
         const result = await collection.insertOne({
             filename: req.file.filename,
             path: req.file.path
@@ -177,7 +175,60 @@ async function queryLen(query){
     }
 }
 
+async function updateEquip(req, res) {
+    try {
+        await client.connect();
+        const database = client.db(dbName);
+        const collection = database.collection('equipments');
+        const equipId = req.params.id;
+        const updateFields = {
+            $set: {
+                productName: req.body.productName,
+                description: req.body.description,
+                price: req.body.price,
+                quantity: req.body.quantity,
+                category: req.body.category,
+            }
+        };
+        const result = await collection.updateOne({ _id: ObjectId(equipId) }, updateFields);
 
+        if (result.modifiedCount === 1) {
+            res.send('Equipment updated successfully!');
+        } else {
+            res.status(404).send('Equipment not found or no changes were made.');
+        }
+    } catch (error) {
+        console.error('Error updating equipment:', error);
+        res.status(500).send('Error updating equipment.');
+    } finally {
+        // Close the database connection
+        await client.close();
+    }
+}
+async function deleteEquip(req, res) {
+    try {
+        await client.connect();
+        const database = client.db(dbName);
+        const collection = database.collection('equipments');
+        const equipId = req.params.id;
+        const result = await collection.deleteOne({ _id: ObjectId(equipId) });
+
+        if (result.deletedCount === 1) {
+            res.send('Equipment deleted successfully!');
+        } else {
+            res.status(404).send('Equipment not found.');
+        }
+    } catch (error) {
+        console.error('Error deleting equipment:', error);
+        res.status(500).send('Error deleting equipment.');
+    } finally {
+        // Close the database connection
+        await client.close();
+    }
+}
+
+module.exports.deleteEquip = deleteEquip
+module.exports.updateEquip = updateEquip
 module.exports.addEquip = addEquip;
 module.exports.getAllCategories = getAllCategories;
 module.exports.getAllCategoriesWithImg = getAllCategoriesWithImg;
