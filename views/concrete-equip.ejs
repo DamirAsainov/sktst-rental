@@ -62,6 +62,7 @@
 
             <div class="col">
                 <h3><%= eq.productName%></h3>
+                <p style="display: none" id="id"><%= eq._id%></p>
                 <div class="status-div mt-3">
                     <i class="fa-sharp fa-solid fa-circle-info me-2" style="font-size: 30px;"></i>
                     Available
@@ -72,7 +73,10 @@
                     <p style="position: relative; top: 8px;" id="count">1</p>
                     <i class="fa-solid fa-plus" onclick="plus(<%= eq.quantity%>)" style="cursor:pointer;"></i>
                 </div>
-                <button class="btn btn-outline-warning mt-3" style="width: 100px; height: 50px;" onclick="addToCart('<%= eq._id%>')">Add</button>
+                <button class="btn btn-outline-warning mt-3" id="add-btn" style="width: 100px; height: 50px;" onclick="addToCart('<%= eq._id%>')">Add</button>
+                <button class="btn btn-outline-danger mt-3" id="remove-btn" style="width: 100px; height: 50px; display: none" onclick="deleteEquipFromCookie('<%= eq._id%>')">Remove</button>
+                <button class="btn btn-outline-info mt-3" style="height: 50px; display: none" id="basket-btn" onclick="basketRedirect()">Go to Basket</button>
+
 
                 <p class="mt-3"><%= eq.description%>
                 </p>
@@ -85,49 +89,5 @@
 <script src="/bootstrap-5.3.2-dist/js/bootstrap.js"></script>
 <script src="/js/concreateEquipJS.js"></script>
 <script src="/js/header.js"></script>
-<script>
-    function setCookie(name, value, days) {
-        var expires = "";
-        if (days) {
-            var date = new Date();
-            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-            expires = "; expires=" + date.toUTCString();
-        }
-        document.cookie = name + "=" + (value || "") + expires + "; path=/";
-    }
-
-    // Function to get a cookie value
-    function getCookie(name) {
-        const nameEQ = name + "=";
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            let cookie = cookies[i];
-            while (cookie.charAt(0) == ' ') {
-                cookie = cookie.substring(1, cookie.length);
-            }
-            if (cookie.indexOf(nameEQ) == 0) {
-                return cookie.substring(nameEQ.length, cookie.length);
-            }
-        }
-        return null;
-    }
-
-    function addToCart(productId) {
-        let cartItems = getCartItems();
-        if (!cartItems) {
-            cartItems = [];
-        }
-        cartItems.push(productId);
-        setCookie('cartItems', JSON.stringify(cartItems), 7); // Store for 7 days
-    }
-    function getCartItems() {
-        const cartItems = getCookie('cartItems');
-        return cartItems ? JSON.parse(cartItems) : [];
-    }
-    function showCartItems() {
-        const cartItems = getCartItems();
-        console.log("Cart Items:", cartItems);
-    }
-</script>
 </body>
 </html>
