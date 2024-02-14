@@ -26,7 +26,6 @@ async function registration(req,res) {
             return;
         }
         const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(7))
-        const userRole = await Role.findOne({value: "USER"})
         const user = new User({username, password: hashPassword, roles: ["USER"]})
         await user.save();
         res.json({message: "User successfully added"});

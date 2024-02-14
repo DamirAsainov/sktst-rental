@@ -4,6 +4,7 @@ const path = require('path');
 const crudFunctions = require('./crud')
 const mongoose = require('mongoose');
 const authCont = require('./authController');
+const orderCont = require('./orderController');
 const {check, cookie} = require('express-validator');
 const cookieParser = require('cookie-parser')
 const { scv } = require("cookie-json-converter");
@@ -40,7 +41,7 @@ app.get('/', addTokenMiddleware,async (req, res) => {
 })
 app.get('/add-equip',addTokenMiddleware, roleMiddleware("ADMIN"), async (req, res) => {
     const titlesArray = await crudFunctions.getAllCategories();
-    res.render('add-equip', {categories: titlesArray.map(document => document.title)})
+    res.render('add-equip', {categories: titlesArray.map(document => document.title), login: true})
 })
 app.get('/equip/:id', addTokenMiddleware,async (req, res) => {
     const equip = await crudFunctions.getEquip(req.params.id); // change
@@ -51,16 +52,16 @@ app.get('/equip/:id', addTokenMiddleware,async (req, res) => {
     }
 })
 app.get('/add-category',addTokenMiddleware, roleMiddleware("ADMIN"), (req, res) => {
-    res.render('add-category');
+    res.render('add-category', {login: true});
 })
 app.get('/test', addTokenMiddleware, roleMiddleware(["USER"]), async (req, res) => {
     const categories = await crudFunctions.getAllCategoriesWithImg();
     res.render('test', {categories: categories , login:true})
 })
-app.post('/add-category-db',upload.single('image'), async (req, res) =>{
+app.post('/add-category-db', addTokenMiddleware, roleMiddleware("ADMIN"),upload.single('image'), async (req, res) =>{
     await crudFunctions.addCategory(req, res);
 })
-app.post('/add-equip-db', upload.single('image'), async (req, res) => {
+app.post('/add-equip-db', addTokenMiddleware, roleMiddleware("ADMIN"), upload.single('image'), async (req, res) => {
     await crudFunctions.addEquip(req, res)
 });
 app.get('/uploads/:imgname',(req, res) =>{
@@ -105,6 +106,10 @@ app.get('/basket',addTokenMiddleware, async (req, res) =>{
     }
     res.render('basket', {login: authCont.verifyUser(req), equips});
 })
+app.post('/create-order', addTokenMiddleware, authMiddleware, async (req, res)=>{
+    await orderCont.createOrder(req, res);
+})
+
 
 
 
