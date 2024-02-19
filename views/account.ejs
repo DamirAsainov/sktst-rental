@@ -1,101 +1,169 @@
-<!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Account: <%= user.username %></title>
-    <!-- Bootstrap CSS link -->
-    <link href="bootstrap-5.3.2-dist/css/bootstrap.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="styles/indexCSS.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-            href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=Zen+Dots&display=swap"
-            rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Open Sans', sans-serif;
-        }
+    <!DOCTYPE html>
+    <html lang="en" data-bs-theme="dark">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Account: <%= user.username %></title>
+        <!-- Bootstrap CSS link -->
+        <link href="bootstrap-5.3.2-dist/css/bootstrap.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        <link rel="stylesheet" href="styles/indexCSS.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link
+                href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=Zen+Dots&display=swap"
+                rel="stylesheet">
+        <style>
+            body {
+                font-family: 'Open Sans', sans-serif;
+            }
 
-        #account-info {
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 50px rgba(255, 255, 255, 0.4);
-            background-color: #1a1d20;
-        }
+            #account-info {
+                max-width: 600px;
+                margin: 50px auto;
+                padding: 20px;
+                border-radius: 5px;
+                box-shadow: 0 0 50px rgba(255, 255, 255, 0.4);
+                background-color: #1a1d20;
+                max-height: 350px;
+            }
 
-        h1 {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+            h1 {
+                text-align: center;
+                margin-bottom: 30px;
+            }
 
-        .user-info {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+            .user-info {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
 
-        .avatar {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-bottom: 20px;
-        }
+            .avatar {
+                width: 100px;
+                height: 100px;
+                border-radius: 50%;
+                object-fit: cover;
+                margin-bottom: 20px;
+            }
 
-        .user-details {
-            text-align: left;
-            margin-bottom: 20px;
-        }
+            .user-details {
+                text-align: left;
+                margin-bottom: 20px;
+            }
 
-        .logout-btn {
-            margin-top: 20px;
-        }
-    </style>
-</head>
-<body class="bg-secondary">
-<%- include('blocks/header') -%>
-<div class="container" id="account-info">
-    <h1>Account Information</h1>
+            .logout-btn {
+                margin-top: 20px;
+            }
+            #account-info,
+            #order-info {
+                border-radius: 5px;
+                box-shadow: 0 0 50px rgba(255, 255, 255, 0.4);
+                background-color: #1a1d20;
+                margin-bottom: 30px;
+                padding: 20px;
+            }
+            .card{
+                border-radius: 5px;
+                background-color: #111113;
+            }
 
-    <div class="user-info">
-        <img src="https://placekitten.com/200/200" alt="User Avatar" class="avatar">
-        <div class="user-details">
-            <p><strong>Username:</strong> <%= user.username %></p>
-            <p><strong>Email:</strong> john.doe@example.com</p>
-            <p><strong>Membership Level:</strong> Premium</p>
-            <p><strong>Account Created:</strong> January 1, 2022</p>
+            .avatar {
+                width: 100px;
+                height: 100px;
+                border-radius: 50%;
+                object-fit: cover;
+                margin-bottom: 20px;
+            }
+
+            .user-info,
+            .order-info {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .user-details,
+            .order-details {
+                text-align: left;
+                margin-bottom: 20px;
+            }
+
+            .logout-btn {
+                margin-top: 20px;
+            }
+        </style>
+    </head>
+    <body class="bg-secondary">
+    <%- include('blocks/header') -%>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5" id="account-info">
+                <h1>Account Information</h1>
+                <div class="user-info">
+                    <img src="https://placekitten.com/200/200" alt="User Avatar" class="avatar">
+                    <div class="user-details">
+                        <p><strong>Username:</strong> <%= user.username %></p>
+                        <!-- Добавьте другие детали пользователя по необходимости -->
+                    </div>
+                </div>
+                <button class="btn btn-primary logout-btn" onclick="logout()">Logout</button>
+            </div>
+            <div class="col-md-6 offset-md-0 offset-xl-1" id="order-info" style="margin: 50px auto">
+                <h1>Orders Information</h1>
+                <div class="order-details">
+                    <div class="card order mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Order #1</h5>
+                            <p class="card-text"><strong>Date:</strong> January 20, 2024</p>
+                            <p class="card-text"><strong>Total Price:</strong> $120.00</p>
+                            <p class="card-text"><strong>Items:</strong></p>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">Product 1</li>
+                                <li class="list-group-item">Product 2</li>
+                                <li class="list-group-item">Product 3</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card order">
+                        <div class="card-body">
+                            <h5 class="card-title">Order #2</h5>
+                            <p class="card-text"><strong>Date:</strong> February 5, 2024</p>
+                            <p class="card-text"><strong>Total Price:</strong> $80.00</p>
+                            <p class="card-text"><strong>Items:</strong></p>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">Product 1</li>
+                                <li class="list-group-item">Product 2</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <button class="btn btn-primary logout-btn" onclick="logout()">Logout</button>
-</div>
-
-<!-- Bootstrap JS and Popper.js scripts -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Bootstrap JS and Popper.js scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 
-<script>
-    async function logout() {
-        try {
-            await fetch('/logout', {
-                method: "POST"
-            }).catch(error => console.error('ErrorTest:', error));
-            window.location.href = "/log"
-        } catch (error) {
-            console.error('Error during form submission:', error);
-            throw error;
+    <script>
+        async function logout() {
+            try {
+                await fetch('/logout', {
+                    method: "POST"
+                }).catch(error => console.error('ErrorTest:', error));
+                window.location.href = "/log"
+            } catch (error) {
+                console.error('Error during form submission:', error);
+                throw error;
+            }
         }
-    }
 
 
-</script>
-<script src="bootstrap-5.3.2-dist/js/bootstrap.js"></script>
-<script src="js/indexScript.js"></script>
-</body>
-</html>
+    </script>
+    <script src="bootstrap-5.3.2-dist/js/bootstrap.js"></script>
+    <script src="js/indexScript.js"></script>
+    </body>
+    </html>
