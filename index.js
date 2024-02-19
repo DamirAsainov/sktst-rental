@@ -11,7 +11,8 @@ const { scv } = require("cookie-json-converter");
 const authMiddleware = require('./midldleware/authMiddleware')
 const roleMiddleware = require('./midldleware/roleMiddleware')
 const {login} = require("./authController");
-const addTokenMiddleware = require('./midldleware/addTokenMiddleware')
+const addTokenMiddleware = require('./midldleware/addTokenMiddleware');
+
 
 
 
