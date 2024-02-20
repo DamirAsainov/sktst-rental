@@ -11,8 +11,7 @@ const { scv } = require("cookie-json-converter");
 const authMiddleware = require('./midldleware/authMiddleware')
 const roleMiddleware = require('./midldleware/roleMiddleware')
 const {login} = require("./authController");
-const addTokenMiddleware = require('./midldleware/addTokenMiddleware');
-
+const addTokenMiddleware = require('./midldleware/addTokenMiddleware')
 
 
 
@@ -114,9 +113,11 @@ app.post('/create-order', addTokenMiddleware, authMiddleware, async (req, res)=>
 
 
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 async function start(){
-    await mongoose.connect("mongodb://localhost:27017/myProject")
+    // await mongoose.connect("mongodb://localhost:27017/myProject")
+    await mongoose.connect("mongodb+srv://damirasainov:y6UH2PG11MUYGg0w@sktst-rental.6stklnx.mongodb.net/myProject?retryWrites=true&w=majority")
+
     app.listen(PORT, () => {
         console.log(`Server started: http://localhost:${PORT}`)
     });
