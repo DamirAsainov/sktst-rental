@@ -1,164 +1,120 @@
-const { MongoClient, ObjectId, ServerApiVersion} = require('mongodb');
-// const url = 'mongodb://localhost:27017';
-const url = "mongodb+srv://damirasainov:y6UH2PG11MUYGg0w@sktst-rental.6stklnx.mongodb.net/?retryWrites=true&w=majority";
-const client = new MongoClient(url, {
-    serverApi: {
-        version: ServerApiVersion.v1,
-        strict: true,
-        deprecationErrors: true,
-    }
-});
-const dbName = 'myProject';
+const Category = require('./models/Category');
+const Image = require('./models/Image');
+const Equipment = require('./models/Equipment');
+const User = require('./models/User')
+
 
 
 const getAllCategories = async () => {
-    try{
-        await client.connect();
-        const db = client.db(dbName);
-        const collection = db.collection('categories');
-        const documents = await collection.find({}).toArray();
-        return documents;
-        // const titlesArray = documents.map(document => document.title);
-        // return titlesArray;
-    } catch (error){
-        console.error("Get All Categories Error:",error);
+    try {
+        return await Category.find().populate('imageID');
+    } catch (error) {
+        console.error("Get All Categories Error:", error);
         return null;
-    } finally {
-        await client.close;
     }
 }
 const getAllCategoriesWithImg = async () => {
-    try{
-        await client.connect();
-        const db = client.db(dbName);
-        let collection = db.collection('categories');
-        const documents = await collection.find({}).toArray();
-        collection = db.collection('images')
-        for (const doc of documents) {
-            doc.image = await collection.findOne({_id: doc.imageID});
+    try {
+        const categories = await Category.find();
+        for (const category of categories) {
+            category.image = await Image.findById(category.imageID);
         }
-        return  documents;
-    } catch (error){
-        console.error("Get All Categories Error:",error);
+        return categories;
+    } catch (error) {
+        console.error("Get All Categories Error:", error);
         return null;
-    } finally {
-        await client.close;
     }
 }
-const getAllCategoriesWithEquip = async () =>{
-    try{
-        await client.connect();
-        const db = client.db(dbName);
-        let collection = db.collection('categories');
-        const documents = await collection.find({}).toArray();
-        collection = db.collection('equipments');
-        for(const doc of documents){
-            doc.equip = await collection.find({category: doc.title}).toArray();
+async function getAllCategoriesWithEquip() {
+    try {
+        const categories = await Category.find();
+        for (const category of categories) {
+            category.equip = await Equipment.find({category: (await category).title});
+            console.log(category.equip)
         }
-        return documents;
-    } catch (error){
-        console.error("Get all categories with equipments error", error);
-    } finally {
-        await client.close();
+        return categories;
+    } catch (error) {
+        console.error("Error getting all categories with equipments", error);
+        return null;
     }
 }
 async function addEquip(req, res){
-    try{
-        await client.connect();
-        const database = client.db(dbName);
-        let collection = database.collection('images');
-        const result = await collection.insertOne({
+    try {
+        const image = new Image({
             filename: req.file.filename,
             path: req.file.path
         });
+        const savedImage = await image.save();
 
-        console.log(`File uploaded with ID: ${result.insertedId}`);
+        console.log(`File uploaded with ID: ${savedImage._id}`);
         console.log(req.body.productName);
 
-        collection = database.collection('equipments');
-        await collection.insertOne({
+        const equipment = new Equipment({
             productName: req.body.productName,
             description: req.body.description,
             price: req.body.price,
             quantity: req.body.quantity,
             category: req.body.category,
-            imageID: result.insertedId,
+            imageID: savedImage._id,
             imagePath: req.file.path
-        })
+        });
+        await equipment.save();
+
         res.send('File uploaded successfully!');
-    } catch (error){
+    } catch (error) {
         console.error('Error uploading file', error);
         res.status(500).send('Error uploading file.');
-    } finally {
-        await client.close();
     }
 }
 async function addCategory(req,res){
     try{
-        await client.connect();
-        const database = client.db(dbName);
-        let collection = database.collection('images');
-
-        const result = await collection.insertOne({
+        const image = new Image({
             filename: req.file.filename,
             path: req.file.path
         });
-        collection = database.collection('categories')
-        await collection.insertOne({
+        const savedImage = await image.save();
+
+        const category= new Category({
             title: req.body.categoryTitle,
-            imageID: result.insertedId
+            imageID: savedImage._id
         });
-        console.log(`Category add with ID: ${result.insertedId}`);
+        const savedCategory = await category.save();
+        console.log(`Category add with ID: ${savedCategory._id}`);
         res.json({message: "Category successfully added"});
     } catch (error) {
         console.error('Error adding category:', error);
         res.status(500).send('Error adding category.');
-    } finally {
-        await client.close();
     }
 }
 async function getEquip(id){
     try{
-        await client.connect();
-        const db = client.db(dbName);
-        let collection = db.collection('equipments');
-        const document = await collection.findOne({_id: new ObjectId(id)});
-        return document;
-    }catch (error){
+        return await Equipment.findById(id);
+    }catch (error) {
         console.error(error);
         return null;
-    }finally {
-        await client.close();
     }
 }
 
 async function getUser(id){
     try{
-        await client.connect();
-        const db = client.db(dbName);
-        let collection = db.collection('users');
-        return await collection.findOne({_id: new ObjectId(id)});
+        const userId = typeof id === 'string' ? id : id.toString();
+        return await User.findOne({_id: userId});
     }catch (error){
         console.error(error);
         return null;
-    }finally {
-        await client.close();
-    }
+   }
 }
 async function searchEquip(query, page){
     try{
         let limit = 6;
         let skip = (page - 1) * limit
-        await client.connect();
-        const db = client.db(dbName);
-        const collection = db.collection('equipments');
 
-        return await collection.find({
+        return await Equipment.find({
             $or: [
                 { productName: { $regex: query, $options: 'i' } }, // Case-insensitive search for equipment name
                 { description: { $regex: query, $options: 'i' } } // Case-insensitive search for equipment description
             ]
-        }).skip(skip).limit(limit).toArray();
+        }).skip(skip).limit(limit);
     } catch (e){
         console.error(e);
         return null;
@@ -166,15 +122,12 @@ async function searchEquip(query, page){
 }
 async function queryLen(query){
     try{
-        await client.connect();
-        const db = client.db(dbName);
-        const collection = db.collection('equipments');
-        const equips =  await collection.find({
+        const equips =  await Equipment.find({
             $or: [
                 { productName: { $regex: query, $options: 'i' } }, // Case-insensitive search for equipment name
                 { description: { $regex: query, $options: 'i' } } // Case-insensitive search for equipment description
             ]
-        }).toArray();
+        });
         return equips.length;
     } catch (e){
         console.error(e);
@@ -184,9 +137,6 @@ async function queryLen(query){
 
 async function updateEquip(req, res) {
     try {
-        await client.connect();
-        const database = client.db(dbName);
-        const collection = database.collection('equipments');
         const equipId = req.params.id;
         const updateFields = {
             $set: {
@@ -197,7 +147,7 @@ async function updateEquip(req, res) {
                 category: req.body.category,
             }
         };
-        const result = await collection.updateOne({ _id: ObjectId(equipId) }, updateFields);
+        const result = await Equipment.updateOne({ _id: equipId }, updateFields);
 
         if (result.modifiedCount === 1) {
             res.send('Equipment updated successfully!');
@@ -207,18 +157,12 @@ async function updateEquip(req, res) {
     } catch (error) {
         console.error('Error updating equipment:', error);
         res.status(500).send('Error updating equipment.');
-    } finally {
-        // Close the database connection
-        await client.close();
     }
 }
 async function deleteEquip(req, res) {
     try {
-        await client.connect();
-        const database = client.db(dbName);
-        const collection = database.collection('equipments');
         const equipId = req.params.id;
-        const result = await collection.deleteOne({ _id: ObjectId(equipId) });
+        const result = await Equipment.deleteOne({ _id: equipId });
 
         if (result.deletedCount === 1) {
             res.send('Equipment deleted successfully!');
@@ -228,9 +172,6 @@ async function deleteEquip(req, res) {
     } catch (error) {
         console.error('Error deleting equipment:', error);
         res.status(500).send('Error deleting equipment.');
-    } finally {
-        // Close the database connection
-        await client.close();
     }
 }
 

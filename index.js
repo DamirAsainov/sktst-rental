@@ -98,7 +98,7 @@ app.get('/search',addTokenMiddleware, async (req, res) => {
     res.render('search', { eqs: equips, login: authCont.verifyUser(req), result: await crudFunctions.queryLen(query)})
 })
 app.get('/basket',addTokenMiddleware, async (req, res) =>{
-    const equipsIDs = JSON.parse(scv(req)['cartItems']);
+    const equipsIDs = JSON.parse(scv(req)['cartItems'] || '');
     let equips = [];
     for(let i = 0; i < equipsIDs.length; i++){
         const equip = await crudFunctions.getEquip(equipsIDs[i]);

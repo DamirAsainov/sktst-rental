@@ -93,7 +93,7 @@
     function updateAlert(status){
         const alert = document.getElementById('status');
         const button = document.getElementById('add-category-btn')
-        if (status == "Category successfully added"){
+        if (status.message == "Category successfully added"){
             alert.classList = 'alert alert-success'
             alert.innerHTML = "Category successfully added"
             button.disabled = true;
