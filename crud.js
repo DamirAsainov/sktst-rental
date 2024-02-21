@@ -30,7 +30,6 @@ async function getAllCategoriesWithEquip() {
         const categories = await Category.find();
         for (const category of categories) {
             category.equip = await Equipment.find({category: (await category).title});
-            console.log(category.equip)
         }
         return categories;
     } catch (error) {

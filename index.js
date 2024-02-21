@@ -98,13 +98,20 @@ app.get('/search',addTokenMiddleware, async (req, res) => {
     res.render('search', { eqs: equips, login: authCont.verifyUser(req), result: await crudFunctions.queryLen(query)})
 })
 app.get('/basket',addTokenMiddleware, async (req, res) =>{
-    const equipsIDs = JSON.parse(scv(req)['cartItems'] || '');
-    let equips = [];
-    for(let i = 0; i < equipsIDs.length; i++){
-        const equip = await crudFunctions.getEquip(equipsIDs[i]);
-        equips.push(equip);
+    try{
+        const equipsIDs = JSON.parse(scv(req)['cartItems'] || '');
+        let equips = [];
+        for(let i = 0; i < equipsIDs.length; i++){
+            const equip = await crudFunctions.getEquip(equipsIDs[i]);
+            equips.push(equip);
+        }
+        res.render('basket', {login: authCont.verifyUser(req), equips});
+    } catch (e){
+        console.log(e)
+        res.render('basket', {login: authCont.verifyUser(req), equips: []});
     }
-    res.render('basket', {login: authCont.verifyUser(req), equips});
+
+
 })
 app.post('/create-order', addTokenMiddleware, authMiddleware, async (req, res)=>{
     await orderCont.createOrder(req, res);
