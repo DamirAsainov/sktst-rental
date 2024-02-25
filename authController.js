@@ -19,14 +19,21 @@ async function registration(req,res) {
             res.status(400).json({message: "Registration Error", errors})
             return;
         }
-        const {username, password} = req.body;
-        const candidate = await User.findOne({username});
+        const {username, email, name, password} = req.body;
+        let candidate = await User.findOne({username});
         if (candidate) {
             res.status(400).json({message: "User with this username already exist"});
             return;
         }
+        candidate = null;
+        candidate = await User.findOne({email: email})
+        console.log(candidate)
+        if (candidate) {
+            res.status(400).json({message: "User with this email already exist"});
+            return;
+        }
         const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(7))
-        const user = new User({username, password: hashPassword, roles: ["USER"]})
+        const user = new User({username, email, name, password: hashPassword, roles: ["USER"]})
         await user.save();
         res.json({message: "User successfully added"});
     } catch (err){
