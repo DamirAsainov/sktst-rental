@@ -35,7 +35,6 @@ app.use(cookieParser())
 
 
 app.get('/', addTokenMiddleware,async (req, res) => {
-
     const categories = await crudFunctions.getAllCategoriesWithEquip();
     res.render('index', {categories: categories, login: authCont.verifyUser(req)});
 })
@@ -130,6 +129,9 @@ async function start(){
     });
 }
 start();
+
+module.exports = app;
+module.exports.start = start;
 
 
 

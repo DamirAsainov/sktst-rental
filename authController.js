@@ -28,10 +28,6 @@ async function registration(req,res) {
         candidate = null;
         candidate = await User.findOne({email: email})
         console.log(candidate)
-        if (candidate) {
-            res.status(400).json({message: "User with this email already exist"});
-            return;
-        }
         const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(7))
         const user = new User({username, email, name, password: hashPassword, roles: ["USER"]})
         await user.save();
@@ -64,7 +60,7 @@ async function login (req, res) {
         res.json({token})
     } catch (e){
         console.error(e);
-        res.status(400).json({message: e})
+        res.status(401).json({message: "Error with login"})
     }
 }
 function logout(req, res){
@@ -101,8 +97,17 @@ function getUserID(req){
         return null;
     }
 }
+async function deleteUser(username){
+    try{
+        await User.deleteOne({username: "user123456789"})
+    } catch (e){
+        console.log(e)
+    }
+
+}
 module.exports.registration = registration;
 module.exports.login = login;
 module.exports.loguot = logout;
 module.exports.verifyUser = verifyUser;
 module.exports.getUserID = getUserID;
+module.exports.deleteUser = deleteUser

@@ -23,7 +23,7 @@ module.exports = function (roles) {
             }
             next();
         } catch (e){
-            console.log(e);
+            console.log("User is not auth");
             return res.status(403).json({message: "User is not auth"})
         }
     }

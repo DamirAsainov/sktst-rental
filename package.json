@@ -4,7 +4,8 @@
   "description": "SKTST rental app",
   "main": "index.js",
   "scripts": {
-    "start": "node index"
+    "start": "node index",
+    "test": "mocha test/test.js"
   },
   "repository": {
     "type": "git",
@@ -33,6 +34,11 @@
     "localStorage": "^1.0.4",
     "mongodb": "^6.3.0",
     "mongoose": "^8.1.1",
-    "multer": "^1.4.5-lts.1"
+    "multer": "^1.4.5-lts.1",
+    "supertest": "^6.3.4"
+  },
+  "devDependencies": {
+    "chai": "^5.1.0",
+    "mocha": "^10.3.0"
   }
 }
