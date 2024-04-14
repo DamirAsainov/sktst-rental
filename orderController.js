@@ -5,11 +5,6 @@ const timers = require("timers");
 
 async function createOrder(req, res){
     try{
-        // const errors = validationResult(req);
-        // if(!errors.isEmpty()){
-        //     res.status(400).json({message: "Registration Error", errors})
-        //     return;
-        // }
         const {name, phoneNumber, daterange, equipsID} = req.body;
         let totalPrice = 0;
         for(let i = 0; i < equipsID.length; i++){

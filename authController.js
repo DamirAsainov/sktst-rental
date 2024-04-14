@@ -3,8 +3,9 @@ const Role = require('./models/Role');
 const bcrypt = require('bcryptjs')
 const {validationResult} = require("express-validator");
 const jwt = require('jsonwebtoken');
-const {secret} = require('./config')
 
+
+const secret = process.env.SECRET_KEY;
 const generateAccessToken = (id, roles) => {
     const payload = {
         id,
@@ -27,8 +28,12 @@ async function registration(req,res) {
         }
         candidate = null;
         candidate = await User.findOne({email: email})
-        console.log(candidate)
+        if(candidate != null){
+            res.status(400).json({message: "User with this '"+ email + "' already exist"});
+            return;
+        }
         const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(7))
+        console.log("username  " + username +  "\nemail  " + email + "\nname  " + name + "\npassword  " + password);
         const user = new User({username, email, name, password: hashPassword, roles: ["USER"]})
         await user.save();
         res.json({message: "User successfully added"});
@@ -44,10 +49,13 @@ async function login (req, res) {
         const username = await req.body.username;
         const password = await req.body.password;
         console.log(username +" " + password)
-        const user = await User.findOne({username});
+        let user = await User.findOne({username});
         if(!user){
-            res.status(400).json({message: `User "${username}"is not exist`})
-            return;
+            user = await User.findOne({email: username})
+            if(!user){
+                res.status(400).json({message: `User "${username}" is not exist`})
+                return;
+            }
         }
         const validPassword = bcrypt.compareSync(password, user.password)
         if(!validPassword){
@@ -99,7 +107,7 @@ function getUserID(req){
 }
 async function deleteUser(username){
     try{
-        await User.deleteOne({username: "user123456789"})
+        await User.deleteOne({username: username})
     } catch (e){
         console.log(e)
     }

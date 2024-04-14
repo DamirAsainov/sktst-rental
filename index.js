@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
@@ -109,8 +111,6 @@ app.get('/basket',addTokenMiddleware, async (req, res) =>{
         console.log(e)
         res.render('basket', {login: authCont.verifyUser(req), equips: []});
     }
-
-
 })
 app.post('/create-order', addTokenMiddleware, authMiddleware, async (req, res)=>{
     await orderCont.createOrder(req, res);
@@ -121,8 +121,7 @@ app.post('/create-order', addTokenMiddleware, authMiddleware, async (req, res)=>
 
 const PORT = process.env.PORT || 3000;
 async function start(){
-    // await mongoose.connect("mongodb://localhost:27017/myProject")
-    await mongoose.connect("mongodb+srv://damirasainov:y6UH2PG11MUYGg0w@sktst-rental.6stklnx.mongodb.net/myProject?retryWrites=true&w=majority")
+    await mongoose.connect(process.env.DB_CONN)
 
     app.listen(PORT, () => {
         console.log(`Server started: http://localhost:${PORT}`)

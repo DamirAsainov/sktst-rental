@@ -26,7 +26,6 @@
                 border-radius: 5px;
                 box-shadow: 0 0 50px rgba(255, 255, 255, 0.4);
                 background-color: #1a1d20;
-                max-height: 350px;
             }
 
             h1 {
@@ -53,9 +52,6 @@
                 margin-bottom: 20px;
             }
 
-            .logout-btn {
-                margin-top: 20px;
-            }
             #account-info,
             #order-info {
                 border-radius: 5px;
@@ -89,28 +85,51 @@
                 text-align: left;
                 margin-bottom: 20px;
             }
-
-            .logout-btn {
-                margin-top: 20px;
+            .btns{
+                display: flex;
+                justify-content: center;
+            }
+            .btns button{
+                margin-right: 10px;
             }
         </style>
     </head>
     <body class="bg-secondary">
     <%- include('blocks/header') -%>
     <div class="container">
-        <div class="row">
-            <div class="col-md-5" id="account-info">
+        <div >
+            <div class="col-10" id="account-info">
                 <h1>Account Information</h1>
                 <div class="user-info">
                     <img src="https://placekitten.com/200/200" alt="User Avatar" class="avatar">
                     <div class="user-details">
-                        <p><strong>Username:</strong> <%= user.username %></p>
-                        <!-- Добавьте другие детали пользователя по необходимости -->
+                        <div class="mb-3 row">
+                            <label for="username" class="col-sm-4 col-form-label"><strong>Username</strong></label>
+                            <div class="col-sm-8">
+                                <input type="text" readonly class="form-control" id="username" value="<%= user.username %>">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="staticEmail" class="col-sm-2 col-form-label"><strong>Email</strong></label>
+                            <div class="col-sm-10">
+                                <input type="text" readonly class="form-control" id="staticEmail" value="<%= user.email %>">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="name" class="col-sm-2 col-form-label"><strong>Name</strong></label>
+                            <div class="col-sm-10">
+                                <input type="text" readonly class="form-control" id="name" value="<%= user.name %>">
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <button class="btn btn-primary logout-btn" onclick="logout()">Logout</button>
+                <div class="btns">
+                    <button class="btn btn-outline-warning" onclick="edit()">Edit</button>
+                    <button class="btn btn-outline-danger" onclick="logout()">Logout</button>
+                </div>
+
             </div>
-            <div class="col-md-6 offset-md-0 offset-xl-1" id="order-info" style="margin: 50px auto">
+            <div class="col-10 offset-md-0 offset-xl-1" id="order-info" style="margin: 50px auto">
                 <h1>Orders Information</h1>
                 <div class="order-details">
                     <div class="card order mb-3">
