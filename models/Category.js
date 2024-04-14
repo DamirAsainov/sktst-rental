@@ -9,7 +9,8 @@ const categorySchema = new Schema({
     imageID: {
         type: Schema.Types.ObjectId,
         ref: 'Image'
-    }
+    },
+    imagePath: String
 });
 
 const Category = mongoose.model('Category', categorySchema);

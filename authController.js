@@ -99,7 +99,6 @@ function getUserID(req){
         if(!token){
             return null;
         }
-        console.log(jwt.decode(token).id)
         return jwt.decode(token).id;
     } catch (e){
         return null;

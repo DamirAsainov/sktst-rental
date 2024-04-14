@@ -57,7 +57,8 @@ app.get('/add-category',addTokenMiddleware, roleMiddleware("ADMIN"), (req, res) 
 })
 app.get('/test', addTokenMiddleware, roleMiddleware(["USER"]), async (req, res) => {
     const categories = await crudFunctions.getAllCategoriesWithImg();
-    res.render('test', {categories: categories , login:true})
+    const image = await crudFunctions.readImageFromMongoDB("image-1713125999456.jpg")
+    res.render('test', {categories: categories , login:true, image})
 })
 app.post('/add-category-db', addTokenMiddleware, roleMiddleware("ADMIN"),upload.single('image'), async (req, res) =>{
     await crudFunctions.addCategory(req, res);
@@ -69,7 +70,7 @@ app.get('/uploads/:imgname',(req, res) =>{
     res.sendFile(__dirname + "/uploads/" + req.params.imgname)
 });
 app.get('/categories',addTokenMiddleware, async (req, res) => {
-    const categories = await crudFunctions.getAllCategoriesWithImg();
+    const categories = await crudFunctions.getAllCategories();
     res.render('categories', {categories: categories , login: authCont.verifyUser(req)});
 });
 app.post('/registration', [check('username', 'Username can not be empty').notEmpty(),
@@ -100,21 +101,41 @@ app.get('/search',addTokenMiddleware, async (req, res) => {
 })
 app.get('/basket',addTokenMiddleware, async (req, res) =>{
     try{
+        const user = await crudFunctions.getUser(authCont.getUserID(req))
         const equipsIDs = JSON.parse(scv(req)['cartItems'] || '');
         let equips = [];
         for(let i = 0; i < equipsIDs.length; i++){
             const equip = await crudFunctions.getEquip(equipsIDs[i]);
             equips.push(equip);
         }
-        res.render('basket', {login: authCont.verifyUser(req), equips});
+        res.render('basket', {login: authCont.verifyUser(req), equips, user});
     } catch (e){
-        console.log(e)
-        res.render('basket', {login: authCont.verifyUser(req), equips: []});
+        res.render('basket', {login: authCont.verifyUser(req), equips: [], user});
     }
 })
 app.post('/create-order', addTokenMiddleware, authMiddleware, async (req, res)=>{
     await orderCont.createOrder(req, res);
 })
+app.get('/image/:filename', async (req, res) => {
+    try {
+        const filename = req.params.filename;
+        const imageData = await crudFunctions.readImageFromMongoDB(filename);
+
+        // Проверка наличия данных изображения
+        if (!imageData) {
+            return res.status(404).send('Изображение не найдено.');
+        }
+
+        // Установка заголовков ответа для изображения
+        res.set('Content-Type', 'image/jpeg'); // Установите соответствующий Content-Type
+
+        // Отправка данных изображения в ответе
+        res.send(imageData);
+    } catch (error) {
+        console.error('Произошла ошибка:', error);
+        res.status(500).send('Произошла ошибка при чтении изображения.');
+    }
+});
 
 
 

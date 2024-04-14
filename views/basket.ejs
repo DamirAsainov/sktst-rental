@@ -193,7 +193,11 @@
             <hr>
             <form>
                 <p>NAME</p>
-                <input name="name" id="name" type="text" placeholder="Erkeldy" required>
+                <%if(user){%>
+                    <input name="name" id="name" type="text" placeholder="Erkeldy" value="<%= user.name %>" required>
+                <%}else{ %>
+                    <input name="name" id="name" type="text" placeholder="Erkeldy" required>
+                <%}%>
                 <p>PHONE NUMBER</p>
                 <input id="phoneNumber" name="phoneNumber" placeholder="Enter your phone number" type="tel" required>
                 <p>START-END DATE</p>

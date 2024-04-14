@@ -2,7 +2,7 @@ const Category = require('./models/Category');
 const Image = require('./models/Image');
 const Equipment = require('./models/Equipment');
 const User = require('./models/User')
-
+const fs = require('fs');
 
 
 const getAllCategories = async () => {
@@ -39,9 +39,11 @@ async function getAllCategoriesWithEquip() {
 }
 async function addEquip(req, res){
     try {
+        const imageBuffer = fs.readFileSync(req.file.path);
         const image = new Image({
             filename: req.file.filename,
-            path: req.file.path
+            path: req.file.path,
+            data: imageBuffer
         });
         const savedImage = await image.save();
 
@@ -55,11 +57,13 @@ async function addEquip(req, res){
             quantity: req.body.quantity,
             category: req.body.category,
             imageID: savedImage._id,
-            imagePath: req.file.path
+            imagePath: "image/" + savedImage.filename
         });
         await equipment.save();
 
         res.send('File uploaded successfully!');
+
+        deleteImage(req.file.path)
     } catch (error) {
         console.error('Error uploading file', error);
         res.status(500).send('Error uploading file.');
@@ -67,19 +71,23 @@ async function addEquip(req, res){
 }
 async function addCategory(req,res){
     try{
+        const imageBuffer = fs.readFileSync(req.file.path);
         const image = new Image({
             filename: req.file.filename,
-            path: req.file.path
+            path: req.file.path,
+            data: imageBuffer
         });
         const savedImage = await image.save();
 
         const category= new Category({
             title: req.body.categoryTitle,
-            imageID: savedImage._id
+            imageID: savedImage._id,
+            imagePath: "image/"+ savedImage.filename
         });
         const savedCategory = await category.save();
         console.log(`Category add with ID: ${savedCategory._id}`);
         res.json({message: "Category successfully added"});
+        deleteImage(req.file.path)
     } catch (error) {
         console.error('Error adding category:', error);
         res.status(500).send('Error adding category.');
@@ -173,7 +181,35 @@ async function deleteEquip(req, res) {
         res.status(500).send('Error deleting equipment.');
     }
 }
+async function readImageFromMongoDB(filename) {
+    try {
+        // Поиск документа изображения по имени файла
+        const imageDoc = await Image.findOne({ filename: filename });
 
+        // Проверка, был ли найден документ
+        if (!imageDoc) {
+            console.log('Изображение не найдено в MongoDB.');
+            return null; // Возвращаем null, если изображение не найдено
+        }
+
+        // Чтение данных изображения из документа как Buffer
+        const imageData = imageDoc.data;
+
+        return imageData;
+    } catch (error) {
+        console.error('Произошла ошибка:', error);
+        return null; // Возвращаем null в случае ошибки
+    }
+}
+function deleteImage(filePath){
+    fs.unlink(filePath, (err) => {
+        if (err) {
+            console.error('Произошла ошибка при удалении файла:', err);
+            return;
+        }
+        console.log('Файл успешно удален.');
+    });
+}
 module.exports.deleteEquip = deleteEquip
 module.exports.updateEquip = updateEquip
 module.exports.addEquip = addEquip;
@@ -186,3 +222,4 @@ module.exports.addEquip = addEquip;
 module.exports.getUser = getUser;
 module.exports.searchEquip = searchEquip;
 module.exports.queryLen = queryLen;
+module.exports.readImageFromMongoDB = readImageFromMongoDB;
